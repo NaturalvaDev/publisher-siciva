@@ -28,14 +28,9 @@ class WhatsappApiController extends Controller
         $data = $validated['data']; // Data dalam bentuk array
         $delay = $validated['delay'];
 
-        // Pisahkan data menjadi bagian-bagian kecil (chunk)
-        $chunks = array_chunk($data, 10); // Pisahkan setiap 10 data menjadi satu chunk
-
-        // Persiapkan job untuk setiap chunk
-        $jobs = [];
-        foreach ($chunks as $chunk) {
-            $jobs[] = (new WhatsappBroadcaster($session_id, $token, $chunk))->delay(now()->addSeconds($delay));
-        }
+        
+        $jobs[] = (new WhatsappBroadcaster($session_id, $token, $data,$delay));
+        
 
         // Kirim batch job
         $batch = Bus::batch($jobs)

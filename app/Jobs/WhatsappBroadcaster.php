@@ -16,6 +16,7 @@ class WhatsappBroadcaster implements ShouldQueue
     protected $session_id;
     protected $token;
     protected $data;
+    protected $delay;
     /**
      * Create a new job instance.
      *
@@ -24,11 +25,12 @@ class WhatsappBroadcaster implements ShouldQueue
      * @param array $data
      * @return void
      */
-    public function __construct($session_id, $token, $data)
+    public function __construct($session_id, $token, $data,$delay)
     {
         $this->session_id = $session_id;
         $this->token = $token;
         $this->data = $data;
+        $this->delay = $delay;
     }
 
     /**
@@ -45,7 +47,8 @@ class WhatsappBroadcaster implements ShouldQueue
                     'Authorization' => 'Bearer ' . $this->token,
                     'Accept'        => 'application/json',
                 ]
-            ])->post("http://103.250.10.220:21465/api/".$this->session_id."/send-message");
+            ])->post(env("WHATSAPP_SERVER_ENDPOINT")."/api/".$this->session_id."/send-message");
+            sleep($this->delay);
         }
     }
 }
