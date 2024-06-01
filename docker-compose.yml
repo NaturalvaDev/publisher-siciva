@@ -18,21 +18,22 @@ services:
     container_name: mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: naturalva123
-      MYSQL_DATABASE: publisher_siciva
-      MYSQL_USER: root
-      MYSQL_PASSWORD: naturalva123
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - laravel
 
   supervisor:
-    image: supervisor:latest
+    image: ubuntu:latest
     container_name: laravel_supervisor
+    command: /bin/bash -c "apt-get update && apt-get install -y supervisor && supervisord -c /etc/supervisor/supervisord.conf"
     restart: unless-stopped
     volumes:
-      - ./supervisor:/etc/supervisor/conf.d
+      - ./supervisor:/etc/supervisor
     networks:
       - laravel
 
