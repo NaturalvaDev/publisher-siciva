@@ -16,7 +16,7 @@ WORKDIR /var/www
 COPY . .
 
 # Install Composer v2
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=2.2.18
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # Verify Composer installation
 RUN composer --version
