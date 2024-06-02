@@ -21,6 +21,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 # Verify Composer installation
 RUN composer --version
 
+RUN ls
 # Install PHP dependencies
 RUN composer install 
 
@@ -32,7 +33,6 @@ COPY php.ini /usr/local/etc/php/php.ini
 
 # Set PHP to use only one php.ini file
 RUN echo "PHP_INI_SCAN_DIR=" > /usr/local/etc/php/conf.d/00-php.ini
-RUN ls
 # Set entrypoint
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
 
