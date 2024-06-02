@@ -34,4 +34,4 @@ ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
 # Expose the port for PHP-FPM
 EXPOSE 9000
 
-# CMD ["php-fpm"]
+CMD ["php-fpm"]
