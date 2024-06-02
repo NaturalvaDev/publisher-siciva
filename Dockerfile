@@ -22,7 +22,7 @@ WORKDIR /var/www
 COPY composer.json composer.lock ./
 
 # Install composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=2.2.18
 
 # Install PHP dependencies
 RUN composer install
