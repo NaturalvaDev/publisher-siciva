@@ -24,9 +24,11 @@ COPY composer.json composer.lock ./
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=2.2.18
 
-RUN composer update --no-dev
+# Verify Composer installation
+RUN composer --version
+
 # Install PHP dependencies
-RUN composer install
+RUN composer install --ignore-platform-reqs
 
 # Copy the rest of the application
 COPY . .
