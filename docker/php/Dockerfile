@@ -11,14 +11,17 @@ COPY supervisord.conf /etc/supervisord.conf
 # Set working directory
 WORKDIR /var/www
 
-# Copy application files
-COPY . /var/www
+# Copy composer.json and composer.lock
+COPY composer.json composer.lock ./
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install PHP dependencies
 RUN composer install
+
+# Copy the rest of the application
+COPY . .
 
 # Set entrypoint
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
