@@ -1,9 +1,16 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
-# Install necessary packages and supervisord
-RUN apt-get update && \
-    apt-get install -y supervisor && \
-    mkdir -p /var/log/supervisor /etc/supervisor/conf.d
+# Update package list
+RUN apt-get update
+
+# Install supervisor
+RUN apt-get install -y --no-install-recommends supervisor
+
+# Clean up APT when done
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Create necessary directories
+RUN mkdir -p /var/log/supervisor /etc/supervisor/conf.d
 
 # Copy supervisord configuration
 COPY supervisord.conf /etc/supervisord.conf
