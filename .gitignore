@@ -5,9 +5,9 @@
 /public/storage
 /storage/*.key
 /vendor
+.env
 .env.backup
 .env.production
-.phpactor.json
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -17,3 +17,13 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+/caddy
+frankenphp
+frankenphp-worker.php
+
+/database/mysql-database-test
+/database/mysql-database
+/database/redis-database
+/storage/s3-data
+storage/mail-tata
