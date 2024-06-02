@@ -27,6 +27,9 @@ RUN composer install
 # Copy the rest of the application
 COPY . .
 
+# Copy custom php.ini from host to container
+COPY php.ini /usr/local/etc/php/php.ini
+
 # Set entrypoint
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
 
