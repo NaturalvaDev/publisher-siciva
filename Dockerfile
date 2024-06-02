@@ -2,7 +2,7 @@ FROM php:8.3-fpm
 
 # Update package list and install dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends supervisor git && \
+    apt-get install -y --no-install-recommends supervisor git zip unzip p7zip && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     mkdir -p /var/log/supervisor /etc/supervisor/conf.d
 
@@ -29,6 +29,9 @@ COPY . .
 
 # Copy custom php.ini from host to container
 COPY php.ini /usr/local/etc/php/php.ini
+
+# Set PHP to use only one php.ini file
+RUN echo "PHP_INI_SCAN_DIR=" > /usr/local/etc/php/conf.d/00-php.ini
 
 # Set entrypoint
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
