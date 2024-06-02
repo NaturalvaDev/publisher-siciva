@@ -32,7 +32,7 @@ COPY php.ini /usr/local/etc/php/php.ini
 
 # Set PHP to use only one php.ini file
 RUN echo "PHP_INI_SCAN_DIR=" > /usr/local/etc/php/conf.d/00-php.ini
-
+RUN ls
 # Set entrypoint
 ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
 
