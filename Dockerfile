@@ -1,58 +1,40 @@
 FROM php:8.3-fpm
 
+# Update package list and install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends supervisor git zip unzip p7zip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /var/log/supervisor /etc/supervisor/conf.d
+
+# Copy supervisord configuration
+COPY supervisord.conf /etc/supervisord.conf
+
 # Set working directory
-WORKDIR /var/www/
+WORKDIR /var/www
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    libonig-dev \
-    libzip-dev \
-    jpegoptim optipng pngquant gifsicle \
-    ca-certificates \
-    vim \
-    tmux \
-    unzip \
-    git \
-    cron \
-    supervisor \
-    curl
+# Copy all
+COPY . .
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install Composer v2
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=2.2.18
 
-# Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-jpeg=/usr/include/ --with-freetype=/usr/include/
-RUN docker-php-ext-install gd
-RUN pecl install -o -f redis &&  rm -rf /tmp/pear && docker-php-ext-enable redis
+# Verify Composer installation
+RUN composer --version
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install PHP dependencies
+RUN composer install 
 
-# Copy project ke dalam container
-COPY . /var/www/
 
-# Copy directory project permission ke container
-COPY --chown=www-data:www-data . /var/www/
-RUN chown -R www-data:www-data /var/www
-RUN chown -R www-data:www-data /var/log/supervisor
+# Copy custom php.ini from host to container
+COPY php.ini /usr/local/etc/php/php.ini
 
-# Install dependency
-RUN composer install
+RUN ls
+# Set PHP to use only one php.ini file
+RUN echo "PHP_INI_SCAN_DIR=" > /usr/local/etc/php/conf.d/00-php.ini
+# Set entrypoint
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
 
-# Expose port 9000
+# Expose the port for PHP-FPM
 EXPOSE 9000
 
-# Tambahkan konfigurasi supervisor
-COPY docker/supervisor/ /etc/
-
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
-
-# Ganti user ke www-data
-USER www-data
+# CMD ["php-fpm"]
