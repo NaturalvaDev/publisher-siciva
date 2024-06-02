@@ -1,5 +1,4 @@
 .git/
-.env
 docker-composer.yml
 bootstrap/cache/*
 storage/app/*
