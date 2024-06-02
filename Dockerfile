@@ -22,7 +22,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 RUN composer --version
 
 # Install PHP dependencies
-RUN composer install --ignore-platform-reqs
+RUN composer install 
 
 # Copy the rest of the application
 COPY . .
