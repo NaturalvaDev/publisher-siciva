@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Install necessary packages and supervisord
 RUN apt-get update && \
